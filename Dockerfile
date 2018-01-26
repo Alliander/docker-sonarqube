@@ -1,6 +1,6 @@
-FROM sonarqube:6.3-alpine
+FROM sonarqube:6.7.1-alpine
 
-COPY /language-plugins/sonar-java-plugin-4.8.0.9441.jar /opt/sonarqube/extensions/plugins
-COPY /language-plugins/sonar-javascript-plugin-2.21.0.4409.jar /opt/sonarqube/extensions/plugins
+COPY /language-plugins/sonar-java-plugin-5.0.1.12818.jar /opt/sonarqube/extensions/plugins
+COPY /language-plugins/sonar-javascript-plugin-4.0.0.5862.jar /opt/sonarqube/extensions/plugins
 
 ENV TZ=Europe/Amsterdam
