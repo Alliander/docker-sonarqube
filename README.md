@@ -6,12 +6,60 @@ waar één of meerdere language module(s) aan is toegevoegd, zie de Dockerfile
 
 Het maken/update van de image doe je met:
 ```console
-$ docker build -t alliander/sonarqube:5.6.2-1 .
+$ docker build -t alliander/sonarqube:7.7.0 .
 ```
 
 Om dit image beschikbaar te hebben in de k8s omgeving(en) moet het nog gepushed worden naar onze repository:
 ```console
-$ docker push alliander/sonarqube:5.6.2-1
+$ docker push alliander/sonarqube:7.7.0
 ```
 
-*Check het versie nummer voordat je bovenstaande commando's uitvoert! De bedoeling is dat deze repo automatisch gebouwd gaat worden middels Docker Hub of Quay.io. Op dit moment is het nog niet zover en moeten wijzigingen in deze repo's handmatig gepushed worden.*
+### Bouwen in Openshift
+Voeg eerste de ImageStream toe en daar de BuildConfig om het image te bouwen.
+
+```yaml
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  labels:
+    app: sonarqube
+  name: sonarqube
+spec:
+  lookupPolicy:
+    local: false
+```
+
+En daarna:
+   
+```yaml
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  annotations:
+  name: sonarqube
+spec:
+  failedBuildsHistoryLimit: 5
+  nodeSelector: null
+  output:
+    to:
+      kind: ImageStreamTag
+      name: 'sonarqube:7.7.0'
+  postCommit: {}
+  resources: {}
+  runPolicy: Serial
+  source:
+    git:
+      uri: 'https://github.com/Alliander/docker-sonarqube'
+    sourceSecret:
+      name: argo-cd-github
+    type: Git
+  strategy:
+    type: Docker
+    dockerStrategy:
+      dockerfilePath: Dockerfile
+  successfulBuildsHistoryLimit: 5
+  triggers:
+  - type: "ConfigChange"
+  - type: "ImageChange"
+```
+

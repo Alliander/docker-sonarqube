@@ -1,6 +1,11 @@
-FROM sonarqube:7.1
-
-COPY /language-plugins/sonar-java-plugin-5.6.0.15032.jar /opt/sonarqube/extensions/plugins
-COPY /language-plugins/sonar-javascript-plugin-4.2.0.6476.jar /opt/sonarqube/extensions/plugins
+FROM sonarqube:7.7-community
 
 ENV TZ=Europe/Amsterdam
+
+RUN ls -l /opt/sonarqube/extensions/plugins/*
+
+RUN rm /opt/sonarqube/extensions/plugins/sonar-python-plugin-*.jar && \
+    rm /opt/sonarqube/extensions/plugins/sonar-javascript-plugin-*.jar && \
+    rm /opt/sonarqube/extensions/plugins/sonar-php-plugin-*.jar
+    
+COPY /language-plugins/* /opt/sonarqube/extensions/plugins/
