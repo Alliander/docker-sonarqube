@@ -3,7 +3,7 @@ FROM sonarqube:7.7-community
 USER root 
 
 # Run as user app:app
-RUN addgroup --gid 2222 app && useradd --gid 2222 --shell /bin/bash --uid 2222 app && chown -R 2222:2222 /opt/sonarqube
+RUN addgroup --gid 22222 app && useradd --gid 22222 --shell /bin/bash --uid 22222 app && chown -R 22222:22222 /opt/sonarqube
 
 # Switch to user app
 USER app
