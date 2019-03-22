@@ -10,7 +10,9 @@ RUN chmod +x /usr/bin/fix-permissions.sh
 
 RUN sh /usr/bin/fix-permissions.sh $SONARQUBE_HOME \
     && chmod 775 $SONARQUBE_HOME/bin/run.sh \ 
-    && chown -R sonarqube:sonarqube /opt/sonarqube/*
+    && chown -R sonarqube:sonarqube /opt/sonarqube/* \
+    && chown -R sonarqube:root /opt/sonarqube/temp
+    
 USER sonarqube
 
 # Run as user app:app
