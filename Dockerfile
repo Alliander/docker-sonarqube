@@ -4,11 +4,13 @@ USER root
 EXPOSE 9000
 
 COPY /usr/bin/ /usr/bin/
+COPY run.sh $SONARQUBE_HOME/bin/
 
 RUN chmod +x /usr/bin/fix-permissions.sh 
 
 RUN sh /usr/bin/fix-permissions.sh $SONARQUBE_HOME \
-    && chmod 775 $SONARQUBE_HOME/bin/run.sh
+    && chmod 775 $SONARQUBE_HOME/bin/run.sh \ 
+    && chown -R sonarqube:root /opt/sonarqube/*
 USER sonarqube
 
 # Run as user app:app
@@ -23,13 +25,12 @@ ENV SONAR_VERSION=7.7 \
     SONARQUBE_JDBC_URL=
 
 WORKDIR $SONARQUBE_HOME
-COPY run.sh $SONARQUBE_HOME/bin/
 
-RUN rm /opt/sonarqube/extensions/plugins/sonar-python-plugin-*.jar && \
-    rm /opt/sonarqube/extensions/plugins/sonar-javascript-plugin-*.jar && \
-    rm /opt/sonarqube/extensions/plugins/sonar-php-plugin-*.jar
+#RUN rm /opt/sonarqube/extensions/plugins/sonar-python-plugin-*.jar && \
+#    rm /opt/sonarqube/extensions/plugins/sonar-javascript-plugin-*.jar && \
+#    rm /opt/sonarqube/extensions/plugins/sonar-php-plugin-*.jar
     
-COPY /language-plugins/* /opt/sonarqube/extensions/plugins/
+#COPY /language-plugins/* /opt/sonarqube/extensions/plugins/
 
 ENTRYPOINT ["./bin/run.sh"]
     
