@@ -1,21 +1,27 @@
 ## Docker image voor SonarQube
 
-Het standaard sonarqube-alpine image bevat geen enkele language plugin, ook java language plugin ontbreekt.
-We hebben daarom een eigen image gemaakt dat niet veel meer is dan de standaard sonarqube-alpine image
-waar één of meerdere language module(s) aan is toegevoegd, zie de Dockerfile
+De file *Dockerfile-alliander-sonarqube* beschrijft het standaard SonarQube image
+versie 7.7 waar standaard een aantal language plugins in zitten. Deze worden
+gebruikt. Verder is er wel een aparte Dockerfile-alliander-sonarqube zodat dit 
+image geplaatst kan worden op DockerHub en Openshift hier gebruik van kan maken.
+Openshift stelt een aantal eisen aan de rechten op folders, etc... 
+
+De Dockerfile wordt gelezen door de BuildConfig in Openshift en maakt een nieuw
+image dat in de registry van het cluster wordt opgeslagen. Dit image wordt
+uiteindelijk gebruikt.
 
 Het maken/update van de image doe je met:
 ```console
-$ docker build -t alliander/sonarqube:7.7.0 .
+$ docker build -t alliander/sonarqube:7.7 .
 ```
 
-Om dit image beschikbaar te hebben in de k8s omgeving(en) moet het nog gepushed worden naar onze repository:
+Push het image naar DockerHub:
 ```console
-$ docker push alliander/sonarqube:7.7.0
+$ docker push alliander/sonarqube:7.7
 ```
 
 ### Bouwen in Openshift
-Voeg eerste de ImageStream toe en daar de BuildConfig om het image te bouwen.
+Voeg eerste de ImageStream toe en daarna de BuildConfig om het image te bouwen.
 
 ```yaml
 apiVersion: image.openshift.io/v1
@@ -29,8 +35,6 @@ spec:
     local: false
 ```
 
-En daarna:
-   
 ```yaml
 apiVersion: build.openshift.io/v1
 kind: BuildConfig
