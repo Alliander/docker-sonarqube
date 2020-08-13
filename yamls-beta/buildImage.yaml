@@ -1,7 +1,7 @@
 apiVersion: build.openshift.io/v1
 kind: BuildConfig
 metadata:
-  annotations:
+  annotations: sonarqube:beta
   name: sonarqube:beta
 spec:
   failedBuildsHistoryLimit: 5
