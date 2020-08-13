@@ -1,11 +1,9 @@
 apiVersion: build.openshift.io/v1
 kind: BuildConfig
 metadata:
-  annotations: sonarqube:beta
-  name: sonarqube:beta
+  name: sonarqube-beta
 spec:
   failedBuildsHistoryLimit: 5
-  nodeSelector: null
   output:
     to:
       kind: ImageStreamTag
