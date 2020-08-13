@@ -1,0 +1,30 @@
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  annotations:
+  name: sonarqube
+spec:
+  failedBuildsHistoryLimit: 5
+  nodeSelector: null
+  output:
+    to:
+      kind: ImageStreamTag
+      name: 'sonarqube'
+  postCommit: {}
+  resources: {}
+  runPolicy: Serial
+  source:
+    git:
+      uri: 'https://github.com/Alliander/docker-sonarqube'
+      ref: 'master'
+    sourceSecret:
+      name: argo-cd-github
+    type: Git
+  strategy:
+    type: Docker
+    dockerStrategy:
+      dockerfilePath: Dockerfile
+  successfulBuildsHistoryLimit: 5
+  triggers:
+  - type: "ConfigChange"
+  - type: "ImageChange"
